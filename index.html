@@ -226,6 +226,29 @@
     text-transform: uppercase;
     color: var(--muted);
   }
+  .pdf-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-top: 1.6rem;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 0.68rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .pdf-link img {
+    height: 46px;
+    width: auto;
+    border: 1px solid rgba(255,255,255,0.18);
+    transition: border-color 0.3s;
+  }
+  .pdf-link:hover { color: var(--accent); }
+  .pdf-link:hover img { border-color: var(--accent); }
+  /* caption is pointer-events:none while pinned — the link must stay clickable */
+  .project.is-pinned .caption .pdf-link { pointer-events: auto; }
+
   .phase-wrap { position: relative; margin-top: 1.4rem; max-width: 34em; }
   .phase { font-size: 0.95rem; color: var(--ink); }
   .phase .tag {
@@ -342,6 +365,10 @@
           hand-assembled over the cast interior volumes.
         </div>
       </div>
+      <a class="pdf-link" href="assets/private-housing.pdf" target="_blank" rel="noopener">
+        <img src="assets/private-housing-pdf-thumb.jpg" alt="First sheet of the Private Housing PDF">
+        <span>Project sheets — PDF&nbsp;↗</span>
+      </a>
     </div>
   </div>
 </section>
@@ -383,6 +410,10 @@
           paper solids testing the movable volumes against the human figure.
         </div>
       </div>
+      <a class="pdf-link" href="assets/rijksdorp-tourist-center.pdf" target="_blank" rel="noopener">
+        <img src="assets/rijksdorp-tourist-center-pdf-thumb.jpg" alt="First sheet of the Rijksdorp Tourist Center PDF">
+        <span>Project sheets — PDF&nbsp;↗</span>
+      </a>
     </div>
   </div>
 </section>
@@ -409,6 +440,7 @@
     document.querySelectorAll(".project").forEach((project) => {
       project.classList.add("is-pinned");
 
+      const process = project.querySelector(".layer-process");
       const model = project.querySelector(".layer-model");
       const modelImg = model.querySelector("img");
       const phaseProcess = project.querySelector(".phase-process");
@@ -436,6 +468,7 @@
       tl.to({}, { duration: 0.55 })
         .to(hint, { autoAlpha: 0, duration: 0.08, ease: "none" }, 0.48)
         .fromTo(model, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "none" }, 0.55)
+        .to(process, { opacity: 0, duration: 0.2, ease: "none" }, 0.68)
         .fromTo(modelImg, { scale: 1.06 }, { scale: 1, duration: 0.45, ease: "none" }, "<")
         .to(phaseProcess, { opacity: 0, duration: 0.12, ease: "none" }, "<")
         .fromTo(phaseModel, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "none" }, "<+0.1")

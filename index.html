@@ -36,7 +36,7 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 0 6vw;
+    padding: 0 6vw 16vh; /* keeps the subtitle clear of the scroll hint */
     position: relative;
   }
   .hero .kicker {
@@ -49,13 +49,20 @@
   .hero h1 {
     font-family: var(--serif);
     font-weight: 300;
-    font-size: clamp(3rem, 10vw, 8.5rem);
-    letter-spacing: 0.06em;
-    line-height: 1.05;
+    font-size: clamp(2.4rem, 6.6vw, 5.6rem);
+    letter-spacing: 0.05em;
+    line-height: 1.12;
+  }
+  .hero .name {
+    margin-top: 2.6rem;
+    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--ink);
   }
   .hero .sub {
-    margin-top: 2.4rem;
-    font-size: clamp(0.85rem, 1.4vw, 1.05rem);
+    margin-top: 1rem;
+    font-size: clamp(0.72rem, 1.1vw, 0.85rem);
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--muted);
@@ -238,26 +245,42 @@
     display: inline-flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.7rem;
+    gap: 0.8rem;
     margin-top: 1.4rem;
     text-decoration: none;
-    color: var(--muted);
-    font-size: 0.66rem;
+    color: var(--ink);
+    font-size: 0.72rem;
     letter-spacing: 0.22em;
     text-transform: uppercase;
     transition: color 0.3s, transform 0.3s;
   }
+  .pdf-link .thumb-wrap { position: relative; display: block; }
   .pdf-link img {
+    display: block;
     height: 84px;
     width: auto;
-    border: 1px solid rgba(255,255,255,0.25);
+    border: 1px solid rgba(255,255,255,0.4);
     box-shadow: 0 14px 40px rgba(0,0,0,0.5);
     transition: border-color 0.3s;
   }
+  .pdf-link .badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.25rem 0.55rem;
+    background: var(--accent);
+    color: var(--bg);
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    font-weight: 500;
+  }
+  .pdf-link .link-label { color: inherit; }
+  .pdf-link .link-label .arrow { color: var(--accent); }
   .pdf-link:hover { color: var(--accent); transform: translateY(-4px); }
   .pdf-link:hover img { border-color: var(--accent); }
   /* pinned: the card sits below the phase text, full width of the plaque column */
   .project.is-pinned .pdf-link { margin: 1.8rem 0 0; pointer-events: auto; width: 100%; }
+  .project.is-pinned .pdf-link .thumb-wrap { width: 100%; }
   .project.is-pinned .pdf-link img { width: 100%; height: auto; }
 
   .phase-row { margin-top: 1.4rem; }
@@ -382,7 +405,8 @@
 
 <header class="hero">
   <p class="kicker">Portfolio · Selected Works</p>
-  <h1>WEN&nbsp;BAO</h1>
+  <h1>Digital-to-Physical<br>Parametric Study</h1>
+  <p class="name">Wen Bao</p>
   <p class="sub">Architecture &amp; Computational Design</p>
   <div class="scroll-hint" aria-hidden="true">
     <span>Scroll</span>
@@ -433,8 +457,11 @@
         </div>
       </div>
       <a class="pdf-link" href="assets/private-housing.pdf" target="_blank" rel="noopener">
-        <img src="assets/private-housing-pdf-thumb.jpg" alt="First sheet of the Private Housing PDF">
-        <span>Project sheets — PDF&nbsp;↗</span>
+        <span class="thumb-wrap">
+          <img src="assets/private-housing-pdf-thumb.jpg" alt="First sheet of the Private Housing PDF">
+          <span class="badge">PDF</span>
+        </span>
+        <span class="link-label">View project sheets&nbsp;<span class="arrow">↗</span></span>
       </a>
       </div>
     </div>
@@ -479,8 +506,11 @@
         </div>
       </div>
       <a class="pdf-link" href="assets/rijksdorp-tourist-center.pdf" target="_blank" rel="noopener">
-        <img src="assets/rijksdorp-tourist-center-pdf-thumb.jpg" alt="First sheet of the Rijksdorp Tourist Center PDF">
-        <span>Project sheets — PDF&nbsp;↗</span>
+        <span class="thumb-wrap">
+          <img src="assets/rijksdorp-tourist-center-pdf-thumb.jpg" alt="First sheet of the Rijksdorp Tourist Center PDF">
+          <span class="badge">PDF</span>
+        </span>
+        <span class="link-label">View project sheets&nbsp;<span class="arrow">↗</span></span>
       </a>
       </div>
     </div>

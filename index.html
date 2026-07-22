@@ -123,29 +123,77 @@
     align-items: center;
     justify-content: center;
   }
-  .project.is-pinned .layer-process img {
-    width: min(84vw, 160vh);
-    height: auto;
-    max-height: 76vh;
+  /* both layers share one centred frame so the crossfade swaps in place */
+  .project.is-pinned .layer { padding-bottom: 18vh; }
+  .project.is-pinned .layer img {
+    height: 58vh;
+    width: auto;
+    max-width: 82vw;
     object-fit: contain;
     box-shadow: 0 30px 80px rgba(0,0,0,0.55);
   }
-  .project.is-pinned .layer-model img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
   .project.is-pinned .layer-model { opacity: 0; }
 
-  .scrim {
+  /* progress rail: 01 process → 02 model */
+  .pin-ui { display: none; }
+  .project.is-pinned .pin-ui {
+    display: flex;
     position: absolute;
-    left: 0; right: 0; bottom: 0;
-    height: 38vh;
-    background: linear-gradient(to top, rgba(10,10,12,0.78), transparent);
+    right: 4vw;
+    top: 50%;
+    transform: translateY(-50%);
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    z-index: 4;
     pointer-events: none;
-    display: none;
   }
-  .project.is-pinned .scrim { display: block; }
+  .pin-ui .p-label {
+    writing-mode: vertical-rl;
+    font-size: 0.6rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .pin-ui .track {
+    width: 1px;
+    height: 17vh;
+    background: rgba(255,255,255,0.16);
+    position: relative;
+    overflow: hidden;
+  }
+  .pin-ui .fill {
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+
+  /* per-project scroll nudge, fades once the crossfade begins */
+  .pin-scrollhint { display: none; }
+  .project.is-pinned .pin-scrollhint {
+    display: flex;
+    position: absolute;
+    bottom: 3.5vh;
+    left: 50%;
+    transform: translateX(-50%);
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--muted);
+    font-size: 0.6rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    z-index: 4;
+    pointer-events: none;
+  }
+  .pin-scrollhint .line {
+    width: 1px;
+    height: 38px;
+    background: linear-gradient(to bottom, transparent, var(--muted));
+    animation: drip 2.2s ease-in-out infinite;
+  }
 
   .caption {
     padding: 1.6rem 6vw 4rem;
@@ -266,22 +314,31 @@
     </figure>
     <p class="stack-label">02 — Physical model</p>
     <figure class="layer layer-model">
-      <img src="assets/private-house-model.jpg" alt="Hand-built lattice model of the Private House" loading="lazy">
+      <img src="assets/private-house-model.jpg" alt="Hand-built lattice model of Private Housing" loading="lazy">
     </figure>
-    <div class="scrim"></div>
+    <div class="pin-ui" aria-hidden="true">
+      <span class="p-label p-process">01 Process</span>
+      <div class="track"><div class="fill"></div></div>
+      <span class="p-label p-model">02 Model</span>
+    </div>
+    <div class="pin-scrollhint" aria-hidden="true">
+      <span>Scroll</span>
+      <span class="line"></span>
+    </div>
     <div class="caption">
       <p class="index">Project 01</p>
-      <h2>Private House</h2>
-      <p class="meta">Residential · Rhino + Grasshopper · Physical Model</p>
+      <h2>Private Housing</h2>
+      <p class="meta">Studio · Netherlands · 90 m² · Under Construction</p>
       <div class="phase-wrap">
         <div class="phase phase-process">
           <span class="tag">01 — Parametric process</span><br>
-          The roof lattice is generated in Grasshopper — rafter count, pitch and
-          rotation stay live parameters, iterated in real time over the site model.
+          The roof reads as complex, yet follows simple rules: a chopped cube,
+          duplicated four times and rotated 90/180° — the high points connected
+          into roof lines, kept live in Grasshopper.
         </div>
         <div class="phase phase-model">
           <span class="tag">02 — Physical model</span><br>
-          The final geometry leaves the screen: a laser-cut timber lattice,
+          The final geometry leaves the screen: a laser-cut lattice roof,
           hand-assembled over the cast interior volumes.
         </div>
       </div>
@@ -298,23 +355,32 @@
     </figure>
     <p class="stack-label">02 — Physical model</p>
     <figure class="layer layer-model">
-      <img src="assets/rijksdorf-model.jpg" alt="Folded paper study models of the Rijksdorf Tourist Complex" loading="lazy">
+      <img src="assets/rijksdorf-model.jpg" alt="Folded paper study models of the Rijksdorp Tourist Center" loading="lazy">
     </figure>
-    <div class="scrim"></div>
+    <div class="pin-ui" aria-hidden="true">
+      <span class="p-label p-process">01 Process</span>
+      <div class="track"><div class="fill"></div></div>
+      <span class="p-label p-model">02 Model</span>
+    </div>
+    <div class="pin-scrollhint" aria-hidden="true">
+      <span>Scroll</span>
+      <span class="line"></span>
+    </div>
     <div class="caption">
       <p class="index">Project 02</p>
-      <h2>Rijksdorf Tourist Complex</h2>
-      <p class="meta">Tourism · Subdivision Studies · Paper Models</p>
+      <h2>Rijksdorp Tourist Center</h2>
+      <p class="meta">Visitor Centre · Leiden, NL · 26 m² · Shortlisted, Young Architecture Award</p>
       <div class="phase-wrap">
         <div class="phase phase-process">
           <span class="tag">01 — Parametric process</span><br>
-          Faceted volumes are grown from primitive pyramids through Catmull–Clark
-          and Loop subdivision, tuned against the dune landscape.
+          Inspired by Kengo Kuma: stone-like volumes grown through mesh
+          subdivision, meant to sit back in harmony with the dune and forest
+          landscape rather than dominate it.
         </div>
         <div class="phase phase-model">
           <span class="tag">02 — Physical model</span><br>
           The subdivided meshes are unrolled and folded back into space —
-          crisp paper solids testing scale against the human figure.
+          paper solids testing the movable volumes against the human figure.
         </div>
       </div>
     </div>
@@ -347,6 +413,12 @@
       const modelImg = model.querySelector("img");
       const phaseProcess = project.querySelector(".phase-process");
       const phaseModel = project.querySelector(".phase-model");
+      const fill = project.querySelector(".pin-ui .fill");
+      const labelProcess = project.querySelector(".p-label.p-process");
+      const labelModel = project.querySelector(".p-label.p-model");
+      const hint = project.querySelector(".pin-scrollhint");
+
+      gsap.set(labelProcess, { color: "#eceae6" });
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -356,15 +428,19 @@
           scrub: 0.6,
           pin: true,
           anticipatePin: 1,
+          onUpdate: (self) => gsap.set(fill, { scaleY: self.progress }),
         },
       });
 
       // hold the GIF for the first stretch, then crossfade to the model photo
       tl.to({}, { duration: 0.55 })
-        .fromTo(model, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "none" })
-        .fromTo(modelImg, { scale: 1.07 }, { scale: 1, duration: 0.45, ease: "none" }, "<")
+        .to(hint, { autoAlpha: 0, duration: 0.08, ease: "none" }, 0.48)
+        .fromTo(model, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "none" }, 0.55)
+        .fromTo(modelImg, { scale: 1.06 }, { scale: 1, duration: 0.45, ease: "none" }, "<")
         .to(phaseProcess, { opacity: 0, duration: 0.12, ease: "none" }, "<")
         .fromTo(phaseModel, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "none" }, "<+0.1")
+        .to(labelProcess, { color: "#8f8d85", duration: 0.1, ease: "none" }, 0.55)
+        .to(labelModel, { color: "#eceae6", duration: 0.1, ease: "none" }, 0.6)
         .to({}, { duration: 0.15 }); // brief hold on the model before release
 
       cleanups.push(tl);

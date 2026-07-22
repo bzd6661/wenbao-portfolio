@@ -95,25 +95,6 @@
     100% { transform: scaleY(0); transform-origin: bottom; }
   }
 
-  /* ---------- Statement ---------- */
-  .statement {
-    min-height: 60vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 14vh 8vw;
-  }
-  .statement p {
-    font-family: var(--serif);
-    font-weight: 300;
-    font-size: clamp(1.5rem, 3.4vw, 2.8rem);
-    line-height: 1.45;
-    max-width: 24em;
-    text-align: center;
-    color: var(--ink);
-  }
-  .statement em { font-style: italic; color: var(--accent); }
-
   /* ---------- Project sections ---------- */
   .project { position: relative; }
   .stage { position: relative; }
@@ -415,11 +396,6 @@
   </div>
 </header>
 
-<section class="statement">
-  <p>Every form begins as a <em>rule</em> — and ends as an object you can hold.
-     Two projects, traced from algorithm to artefact.</p>
-</section>
-
 <!-- ============ Project 1 ============ -->
 <section class="project" id="private-house">
   <div class="stage">
@@ -587,13 +563,9 @@
       cleanups.push(tl);
     });
 
-    // gentle fade-up for hero + statement
+    // gentle fade-up for the hero
     gsap.from(".hero h1, .hero .kicker, .hero .sub", {
       opacity: 0, y: 26, duration: 1.1, stagger: 0.12, ease: "power2.out",
-    });
-    gsap.from(".statement p", {
-      opacity: 0, y: 30, duration: 1,
-      scrollTrigger: { trigger: ".statement", start: "top 75%" },
     });
 
     return () => {

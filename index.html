@@ -228,26 +228,37 @@
   }
   .pdf-link {
     display: inline-flex;
-    align-items: center;
-    gap: 0.9rem;
-    margin-top: 1.6rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+    margin: 0 6vw 3.5rem;
     text-decoration: none;
     color: var(--muted);
     font-size: 0.68rem;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    transition: color 0.3s;
+    transition: color 0.3s, transform 0.3s;
   }
   .pdf-link img {
-    height: 46px;
+    height: 96px;
     width: auto;
-    border: 1px solid rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.25);
+    box-shadow: 0 14px 40px rgba(0,0,0,0.5);
     transition: border-color 0.3s;
   }
-  .pdf-link:hover { color: var(--accent); }
+  .pdf-link:hover { color: var(--accent); transform: translateY(-4px); }
   .pdf-link:hover img { border-color: var(--accent); }
-  /* caption is pointer-events:none while pinned — the link must stay clickable */
-  .project.is-pinned .caption .pdf-link { pointer-events: auto; }
+  /* pinned: a standalone card in the lower-right corner, clear of the caption */
+  .project.is-pinned .pdf-link {
+    position: absolute;
+    right: 4vw;
+    bottom: 6vh;
+    margin: 0;
+    align-items: flex-end;
+    z-index: 4;
+    pointer-events: auto;
+  }
+  .project.is-pinned .pdf-link img { height: 13vh; }
 
   .phase-wrap { position: relative; margin-top: 1.4rem; max-width: 34em; }
   .phase { font-size: 0.95rem; color: var(--ink); }
@@ -365,11 +376,11 @@
           hand-assembled over the cast interior volumes.
         </div>
       </div>
-      <a class="pdf-link" href="assets/private-housing.pdf" target="_blank" rel="noopener">
-        <img src="assets/private-housing-pdf-thumb.jpg" alt="First sheet of the Private Housing PDF">
-        <span>Project sheets — PDF&nbsp;↗</span>
-      </a>
     </div>
+    <a class="pdf-link" href="assets/private-housing.pdf" target="_blank" rel="noopener">
+      <img src="assets/private-housing-pdf-thumb.jpg" alt="First sheet of the Private Housing PDF">
+      <span>Project sheets — PDF&nbsp;↗</span>
+    </a>
   </div>
 </section>
 
@@ -410,11 +421,11 @@
           paper solids testing the movable volumes against the human figure.
         </div>
       </div>
-      <a class="pdf-link" href="assets/rijksdorp-tourist-center.pdf" target="_blank" rel="noopener">
-        <img src="assets/rijksdorp-tourist-center-pdf-thumb.jpg" alt="First sheet of the Rijksdorp Tourist Center PDF">
-        <span>Project sheets — PDF&nbsp;↗</span>
-      </a>
     </div>
+    <a class="pdf-link" href="assets/rijksdorp-tourist-center.pdf" target="_blank" rel="noopener">
+      <img src="assets/rijksdorp-tourist-center-pdf-thumb.jpg" alt="First sheet of the Rijksdorp Tourist Center PDF">
+      <span>Project sheets — PDF&nbsp;↗</span>
+    </a>
   </div>
 </section>
 

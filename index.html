@@ -266,7 +266,8 @@
   .project.is-pinned .pdf-link img { width: 100%; height: auto; }
 
   .phase-row { margin-top: 1.4rem; }
-  .project.is-pinned .phase-wrap { min-height: 12.5em; }
+  /* stack both phases in one grid cell: the wrap auto-sizes to the taller one */
+  .project.is-pinned .phase-wrap { display: grid; }
 
   .phase-wrap { position: relative; max-width: 34em; }
   .phase { font-size: 0.95rem; color: var(--ink); }
@@ -278,7 +279,7 @@
     color: var(--muted);
     margin-bottom: 0.3rem;
   }
-  .project.is-pinned .phase { position: absolute; left: 0; top: 0; width: 100%; }
+  .project.is-pinned .phase { grid-area: 1 / 1; }
   .project.is-pinned .phase-model { opacity: 0; }
   /* stacked (mobile / no-motion) mode: show phases with their own images */
   .project:not(.is-pinned) .phase { margin-bottom: 1.2rem; }
@@ -422,15 +423,18 @@
       <div class="phase-row">
       <div class="phase-wrap">
         <div class="phase phase-process">
-          <span class="tag">01 — Parametric process</span><br>
-          The roof reads as complex, yet follows simple rules: a chopped cube,
-          duplicated four times and rotated 90/180° — the high points connected
-          into roof lines, kept live in Grasshopper.
+          <span class="tag">01 — Generative rules</span><br>
+          The building appears to have a complex and dynamic roof, but its form
+          is generated through a simple set of geometric rules. Four repeated
+          and rotated volumes are arranged around a central courtyard, creating
+          different views, orientations and roof heights around the shared space.
         </div>
         <div class="phase phase-model">
-          <span class="tag">02 — Physical model</span><br>
-          The final geometry leaves the screen: a laser-cut lattice roof,
-          hand-assembled over the cast interior volumes.
+          <span class="tag">02 — Structural skin</span><br>
+          The green outer skin is formed by a grid of vertical and diagonal
+          aluminium members. The vertical members provide the main fixing lines,
+          while the diagonal members improve the stability of the grid and
+          connect the different surfaces into one continuous system.
         </div>
       </div>
       <a class="pdf-link" href="assets/private-housing.pdf" target="_blank" rel="noopener">
@@ -471,15 +475,19 @@
       <div class="phase-row">
       <div class="phase-wrap">
         <div class="phase phase-process">
-          <span class="tag">01 — Parametric process</span><br>
-          Inspired by Kengo Kuma: stone-like volumes grown through mesh
-          subdivision, meant to sit back in harmony with the dune and forest
-          landscape rather than dominate it.
+          <span class="tag">01 — Concept</span><br>
+          This movable visitor centre was designed as a group of stone-like
+          volumes for both forest and dune landscapes. Its reflective surface
+          allows the buildings to respond to their surroundings while remaining
+          clearly recognisable as human-made objects.
         </div>
         <div class="phase phase-model">
-          <span class="tag">02 — Physical model</span><br>
-          The subdivided meshes are unrolled and folded back into space —
-          paper solids testing the movable volumes against the human figure.
+          <span class="tag">02 — Panelisation &amp; model</span><br>
+          The project explores how a complex natural form can be translated into
+          a clear system of individual, buildable panels. The geometry was
+          developed parametrically and tested through a physical paper model,
+          while the lightweight structure was designed for disassembly,
+          transport and reuse.
         </div>
       </div>
       <a class="pdf-link" href="assets/rijksdorp-tourist-center.pdf" target="_blank" rel="noopener">

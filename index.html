@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YOUR NAME — Architecture &amp; Computational Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #101012;
+    --ink: #eceae6;
+    --muted: #8f8d85;
+    --accent: #a3ad7f;
+    --serif: "Cormorant Garamond", Georgia, serif;
+    --sans: "Inter", "Helvetica Neue", sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 6vw;
+    position: relative;
+  }
+  .hero .kicker {
+    font-size: 0.75rem;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2.2rem;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(3rem, 10vw, 8.5rem);
+    letter-spacing: 0.06em;
+    line-height: 1.05;
+  }
+  .hero .sub {
+    margin-top: 2.4rem;
+    font-size: clamp(0.85rem, 1.4vw, 1.05rem);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .scroll-hint {
+    position: absolute;
+    bottom: 4vh;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    color: var(--muted);
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+  }
+  .scroll-hint .line {
+    width: 1px;
+    height: 56px;
+    background: linear-gradient(to bottom, transparent, var(--muted));
+    animation: drip 2.2s ease-in-out infinite;
+  }
+  @keyframes drip {
+    0%   { transform: scaleY(0); transform-origin: top; }
+    45%  { transform: scaleY(1); transform-origin: top; }
+    55%  { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  /* ---------- Statement ---------- */
+  .statement {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14vh 8vw;
+  }
+  .statement p {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(1.5rem, 3.4vw, 2.8rem);
+    line-height: 1.45;
+    max-width: 24em;
+    text-align: center;
+    color: var(--ink);
+  }
+  .statement em { font-style: italic; color: var(--accent); }
+
+  /* ---------- Project sections ---------- */
+  .project { position: relative; }
+  .stage { position: relative; }
+
+  .layer { position: relative; }
+  .layer img { display: block; width: 100%; height: auto; }
+
+  /* Desktop pinned mode: .stage becomes a viewport-filling canvas with two
+     stacked layers; JS adds .is-pinned only when ScrollTrigger is active. */
+  .project.is-pinned .stage { height: 100vh; overflow: hidden; }
+  .project.is-pinned .layer {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .project.is-pinned .layer-process img {
+    width: min(84vw, 160vh);
+    height: auto;
+    max-height: 76vh;
+    object-fit: contain;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+  }
+  .project.is-pinned .layer-model img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .project.is-pinned .layer-model { opacity: 0; }
+
+  .scrim {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 38vh;
+    background: linear-gradient(to top, rgba(10,10,12,0.78), transparent);
+    pointer-events: none;
+    display: none;
+  }
+  .project.is-pinned .scrim { display: block; }
+
+  .caption {
+    padding: 1.6rem 6vw 4rem;
+  }
+  .project.is-pinned .caption {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding: 0 6vw 6vh;
+    width: 100%;
+    z-index: 3;
+    pointer-events: none;
+  }
+  .caption .index {
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .caption h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(1.9rem, 4.4vw, 3.6rem);
+    letter-spacing: 0.03em;
+    margin: 0.5rem 0 0.4rem;
+  }
+  .caption .meta {
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .phase-wrap { position: relative; margin-top: 1.4rem; max-width: 34em; }
+  .phase { font-size: 0.95rem; color: var(--ink); }
+  .phase .tag {
+    display: inline-block;
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+  }
+  .project.is-pinned .phase { position: absolute; left: 0; top: 0; width: 100%; }
+  .project.is-pinned .phase-model { opacity: 0; }
+  /* stacked (mobile / no-motion) mode: show phases with their own images */
+  .project:not(.is-pinned) .phase { margin-bottom: 1.2rem; }
+
+  .stack-label {
+    display: none;
+    padding: 3.5rem 6vw 1rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .project:not(.is-pinned) .stack-label { display: block; }
+
+  /* ---------- Contact ---------- */
+  .contact {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 16vh 6vw 10vh;
+  }
+  .contact .kicker {
+    font-size: 0.7rem;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2rem;
+  }
+  .contact a.email {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(1.8rem, 5vw, 4rem);
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--muted);
+    padding-bottom: 0.15em;
+    transition: color 0.3s, border-color 0.3s;
+  }
+  .contact a.email:hover { color: var(--accent); border-color: var(--accent); }
+  .contact .foot {
+    margin-top: 14vh;
+    font-size: 0.68rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <p class="kicker">Portfolio · Selected Works</p>
+  <h1>YOUR&nbsp;NAME</h1>
+  <p class="sub">Architecture &amp; Computational Design</p>
+  <div class="scroll-hint" aria-hidden="true">
+    <span>Scroll</span>
+    <span class="line"></span>
+  </div>
+</header>
+
+<section class="statement">
+  <p>Every form begins as a <em>rule</em> — and ends as an object you can hold.
+     Two projects, traced from algorithm to artefact.</p>
+</section>
+
+<!-- ============ Project 1 ============ -->
+<section class="project" id="private-house">
+  <div class="stage">
+    <p class="stack-label">01 — Parametric process</p>
+    <figure class="layer layer-process">
+      <img src="assets/private-house.gif" alt="Grasshopper parametric roof study of the Private House" loading="lazy">
+    </figure>
+    <p class="stack-label">02 — Physical model</p>
+    <figure class="layer layer-model">
+      <img src="assets/private-house-model.jpg" alt="Hand-built lattice model of the Private House" loading="lazy">
+    </figure>
+    <div class="scrim"></div>
+    <div class="caption">
+      <p class="index">Project 01</p>
+      <h2>Private House</h2>
+      <p class="meta">Residential · Rhino + Grasshopper · Physical Model</p>
+      <div class="phase-wrap">
+        <div class="phase phase-process">
+          <span class="tag">01 — Parametric process</span><br>
+          The roof lattice is generated in Grasshopper — rafter count, pitch and
+          rotation stay live parameters, iterated in real time over the site model.
+        </div>
+        <div class="phase phase-model">
+          <span class="tag">02 — Physical model</span><br>
+          The final geometry leaves the screen: a laser-cut timber lattice,
+          hand-assembled over the cast interior volumes.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Project 2 ============ -->
+<section class="project" id="rijksdorf">
+  <div class="stage">
+    <p class="stack-label">01 — Parametric process</p>
+    <figure class="layer layer-process">
+      <img src="assets/rijksdorf.gif" alt="Grasshopper subdivision form-finding for the Rijksdorf Tourist Complex" loading="lazy">
+    </figure>
+    <p class="stack-label">02 — Physical model</p>
+    <figure class="layer layer-model">
+      <img src="assets/rijksdorf-model.jpg" alt="Folded paper study models of the Rijksdorf Tourist Complex" loading="lazy">
+    </figure>
+    <div class="scrim"></div>
+    <div class="caption">
+      <p class="index">Project 02</p>
+      <h2>Rijksdorf Tourist Complex</h2>
+      <p class="meta">Tourism · Subdivision Studies · Paper Models</p>
+      <div class="phase-wrap">
+        <div class="phase phase-process">
+          <span class="tag">01 — Parametric process</span><br>
+          Faceted volumes are grown from primitive pyramids through Catmull–Clark
+          and Loop subdivision, tuned against the dune landscape.
+        </div>
+        <div class="phase phase-model">
+          <span class="tag">02 — Physical model</span><br>
+          The subdivided meshes are unrolled and folded back into space —
+          crisp paper solids testing scale against the human figure.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="contact">
+  <p class="kicker">Get in touch</p>
+  <a class="email" href="mailto:hello@example.com">hello@example.com</a>
+  <p class="foot">© 2026 Your Name · Built with Rhino, Grasshopper &amp; patience</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  const mm = gsap.matchMedia();
+
+  // re-measure pin positions once all images (incl. GIFs) are in
+  window.addEventListener("load", () => ScrollTrigger.refresh());
+
+  mm.add("(min-width: 768px) and (prefers-reduced-motion: no-preference)", () => {
+    const cleanups = [];
+
+    document.querySelectorAll(".project").forEach((project) => {
+      project.classList.add("is-pinned");
+
+      const model = project.querySelector(".layer-model");
+      const modelImg = model.querySelector("img");
+      const phaseProcess = project.querySelector(".phase-process");
+      const phaseModel = project.querySelector(".phase-model");
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: project,
+          start: "top top",
+          end: "+=160%",
+          scrub: 0.6,
+          pin: true,
+          anticipatePin: 1,
+        },
+      });
+
+      // hold the GIF for the first stretch, then crossfade to the model photo
+      tl.to({}, { duration: 0.55 })
+        .fromTo(model, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "none" })
+        .fromTo(modelImg, { scale: 1.07 }, { scale: 1, duration: 0.45, ease: "none" }, "<")
+        .to(phaseProcess, { opacity: 0, duration: 0.12, ease: "none" }, "<")
+        .fromTo(phaseModel, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "none" }, "<+0.1")
+        .to({}, { duration: 0.15 }); // brief hold on the model before release
+
+      cleanups.push(tl);
+    });
+
+    // gentle fade-up for hero + statement
+    gsap.from(".hero h1, .hero .kicker, .hero .sub", {
+      opacity: 0, y: 26, duration: 1.1, stagger: 0.12, ease: "power2.out",
+    });
+    gsap.from(".statement p", {
+      opacity: 0, y: 30, duration: 1,
+      scrollTrigger: { trigger: ".statement", start: "top 75%" },
+    });
+
+    return () => {
+      document.querySelectorAll(".project").forEach((p) => p.classList.remove("is-pinned"));
+      cleanups.forEach((tl) => tl.kill());
+    };
+  });
+</script>
+</body>
+</html>

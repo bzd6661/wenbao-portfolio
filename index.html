@@ -123,17 +123,15 @@
     align-items: center;
     justify-content: center;
   }
-  /* both layers share one centred frame so the crossfade swaps in place */
-  .project.is-pinned .layer { padding-bottom: 29vh; }
+  /* pinned layout: 30vw plaque column on the left, image zone on the right.
+     Both layers share one centred frame so the crossfade swaps in place. */
+  .project.is-pinned .layer { left: 30vw; padding-bottom: 12vh; }
   .project.is-pinned .layer img {
-    height: 52vh;
+    height: 56vh;
     width: auto;
-    max-width: 82vw;
+    max-width: 62vw;
     object-fit: contain;
     box-shadow: 0 30px 80px rgba(0,0,0,0.55);
-  }
-  @media (max-height: 700px) {
-    .project.is-pinned .layer img { height: 44vh; }
   }
   .project.is-pinned .layer-model { opacity: 0; }
 
@@ -143,7 +141,7 @@
     display: flex;
     position: absolute;
     bottom: 3vh;
-    left: 50%;
+    left: 65vw; /* centre of the right-hand image zone */
     transform: translateX(-50%);
     flex-direction: column;
     align-items: center;
@@ -205,12 +203,17 @@
   .project.is-pinned .caption {
     position: absolute;
     left: 0;
+    top: 0;
     bottom: 0;
-    padding: 0 6vw 11vh; /* keeps the caption clear of the bottom scroll guide */
-    width: 100%;
+    width: 30vw;
+    padding: 0 2vw 0 6vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     z-index: 3;
     pointer-events: none;
   }
+  .project.is-pinned .caption h2 { font-size: clamp(1.8rem, 2.6vw, 2.6rem); }
   .caption .index {
     font-size: 0.7rem;
     letter-spacing: 0.4em;
@@ -253,17 +256,12 @@
   }
   .pdf-link:hover { color: var(--accent); transform: translateY(-4px); }
   .pdf-link:hover img { border-color: var(--accent); }
-  /* pinned: the card joins the info strip, to the right of the phase text */
-  .project.is-pinned .pdf-link { margin: 0; pointer-events: auto; }
-  .project.is-pinned .pdf-link img { height: 7vh; }
+  /* pinned: the card sits below the phase text in the plaque column */
+  .project.is-pinned .pdf-link { margin: 1.8rem 0 0; pointer-events: auto; }
+  .project.is-pinned .pdf-link img { height: 10vh; }
 
   .phase-row { margin-top: 1.4rem; }
-  .project.is-pinned .phase-row {
-    display: flex;
-    align-items: flex-end;
-    gap: 3.5vw;
-  }
-  .project.is-pinned .phase-wrap { flex: 0 1 34em; min-height: 5.4em; }
+  .project.is-pinned .phase-wrap { min-height: 12.5em; }
 
   .phase-wrap { position: relative; max-width: 34em; }
   .phase { font-size: 0.95rem; color: var(--ink); }
@@ -325,6 +323,59 @@
     text-transform: uppercase;
     color: var(--muted);
   }
+
+  /* ---------- PDF modal viewer ---------- */
+  .pdf-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .pdf-modal.open { opacity: 1; pointer-events: auto; }
+  .pdf-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(8, 8, 10, 0.82);
+    backdrop-filter: blur(6px);
+  }
+  .pdf-modal-panel {
+    position: relative;
+    width: 88vw;
+    height: 88vh;
+    background: #1a1a1d;
+    border: 1px solid rgba(255,255,255,0.14);
+    box-shadow: 0 40px 120px rgba(0,0,0,0.7);
+    transform: translateY(14px) scale(0.985);
+    transition: transform 0.25s ease;
+  }
+  .pdf-modal.open .pdf-modal-panel { transform: none; }
+  .pdf-modal-panel iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+  .pdf-close {
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    width: 44px;
+    height: 44px;
+    background: #1a1a1d;
+    border: 1px solid rgba(255,255,255,0.14);
+    color: var(--ink);
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 2;
+    transition: color 0.2s, background 0.2s;
+  }
+  .pdf-close:hover { background: var(--accent); color: var(--bg); }
 </style>
 </head>
 <body>
@@ -442,6 +493,14 @@
   <p class="foot">© 2026 Your Name · Built with Rhino, Grasshopper &amp; patience</p>
 </footer>
 
+<div class="pdf-modal" aria-hidden="true">
+  <div class="pdf-modal-backdrop"></div>
+  <div class="pdf-modal-panel">
+    <button class="pdf-close" aria-label="Close PDF viewer">×</button>
+    <iframe title="Project PDF"></iframe>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script>
@@ -510,6 +569,37 @@
       document.querySelectorAll(".project").forEach((p) => p.classList.remove("is-pinned"));
       cleanups.forEach((tl) => tl.kill());
     };
+  });
+
+  // ---------- PDF modal viewer ----------
+  const modal = document.querySelector(".pdf-modal");
+  const modalFrame = modal.querySelector("iframe");
+
+  function openPdf(url) {
+    modalFrame.src = url + "#view=FitH";
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden", "false");
+    document.documentElement.style.overflow = "hidden";
+  }
+  function closePdf() {
+    modal.classList.remove("open");
+    modal.setAttribute("aria-hidden", "true");
+    document.documentElement.style.overflow = "";
+    setTimeout(() => { modalFrame.src = ""; }, 250); // after the fade-out
+  }
+
+  document.querySelectorAll(".pdf-link").forEach((a) => {
+    a.addEventListener("click", (e) => {
+      // small screens: browsers often can't render PDFs inline — keep the new tab
+      if (window.innerWidth < 768) return;
+      e.preventDefault();
+      openPdf(a.getAttribute("href"));
+    });
+  });
+  modal.querySelector(".pdf-modal-backdrop").addEventListener("click", closePdf);
+  modal.querySelector(".pdf-close").addEventListener("click", closePdf);
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal.classList.contains("open")) closePdf();
   });
 </script>
 </body>

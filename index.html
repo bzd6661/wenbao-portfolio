@@ -54,6 +54,14 @@
     text-transform: uppercase;
     line-height: 1.22;
   }
+  .hero .tagline {
+    margin-top: 2.2rem;
+    font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+    line-height: 1.75;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+    max-width: 36em;
+  }
   .hero .name {
     margin-top: 2.6rem;
     font-size: clamp(0.9rem, 1.5vw, 1.1rem);
@@ -388,7 +396,9 @@
 
 <header class="hero">
   <p class="kicker">Portfolio · Selected Works</p>
-  <h1>Digital-to-Physical<br>Parametric Study</h1>
+  <h1>From Digital<br>to Physical</h1>
+  <p class="tagline">I use simple, repeatable rules to create rich architectural
+     forms and spatial experiences.</p>
   <p class="name">Wen Bao</p>
   <p class="sub">Architecture &amp; Computational Design</p>
   <div class="scroll-hint" aria-hidden="true">
@@ -572,7 +582,7 @@
     });
 
     // gentle fade-up for the hero
-    gsap.from(".hero h1, .hero .kicker, .hero .sub", {
+    gsap.from(".hero h1, .hero .kicker, .hero .tagline, .hero .sub", {
       opacity: 0, y: 26, duration: 1.1, stagger: 0.12, ease: "power2.out",
     });
 
